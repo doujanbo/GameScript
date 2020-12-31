@@ -58,7 +58,6 @@ def ReturnCoordinates(imgobj, Similarity):
     try:
         return matchImg("./screenshot/" + imgobj + ".png", Similarity)
     except:
-        print("没找到")
         sayhello("没有找到图片")
         return None
 
@@ -84,7 +83,6 @@ def FindBMP(name):
     '''移动到指定图片'''
     i = ReturnCoordinates(name, 0.995)
     if i:
-        print(i)
         sayhello("发现此图片")
         return len(i)
     else:
@@ -92,9 +90,24 @@ def FindBMP(name):
         return False
 
 
+def MoveToBMP2(name):
+    '''移动到指定图片'''
+
+    time.sleep(random.randint(66, 100) * 0.001)
+    xy = (0, 0)
+    i = ReturnCoordinates(name, 0.95)
+    if i:
+        xy = highestXY(i)
+        x, y = xy
+        MoveToAdd(x, y)
+        time.sleep(random.randint(66, 100) * 0.001)
+        return len(i)
+    else:
+        return False
 
 def MoveToBMP(name):
     '''移动到指定图片'''
+
     time.sleep(random.randint(66, 100) * 0.001)
     xy = (0, 0)
     i = ReturnCoordinates(name, 0.995)
@@ -111,7 +124,7 @@ def MoveToBMP(name):
 def locking():
     '''锁定矿石'''
     xy = (0, 0)
-    xy = highestXY(ReturnCoordinates("xiaoxinxing", 0.999))
+    xy = highestXY(ReturnCoordinates("xiaoxinxing", 0.995))
     x, y = xy
     MoveToAdd(x, y)  # 移动到小行星的位置
     wyhkm.LeftClick()  # 左健单击
@@ -147,32 +160,65 @@ def locking():
 engine = pyttsx3.init()
 def sayhello(strhello):
     pass
-
+'''
     engine.say(strhello)
     engine.runAndWait()
+    '''
+def sayhello2(strhello):
+    pass
+    engine.say(strhello)
+    engine.runAndWait()
+
 
 def open_gun():
     if MoveToBMP("gun"):
         wyhkm.LeftClick()  # 左健单击
+
+        sayhello2("打开矿枪成功")
         return True
     else:
+        sayhello2("打开矿枪失败")
+
         return False
 
 
 
+
+
 time.sleep(3)
+MoveToBMP("eve")
+wyhkm.LeftClick()
+time.sleep(0.5)
+
 while True:
     #如果有锁定的矿，没有正在挖矿
     if FindBMP("mineral") and (FindBMP("mining") is not True):
+        sayhello2("打开矿枪")
         open_gun()
+        time.sleep(1)
         open_gun()
     #有锁定的矿并且正在挖矿
     if FindBMP("mineral") and FindBMP("mining"):
+        sayhello2("正在挖矿")
         time.sleep(3)
     #如果只有一个锁定的矿
     if FindBMP("mineral") < 2:
+        sayhello2("锁定")
         locking()
-    if MoveToBMP("Orebin")
+
+    if MoveToBMP("Orebin"):
+        wyhkm.LeftClick()
+        if MoveToBMP2("Warehouseore"):
+            sayhello2("转移矿石")
+            wyhkm.LeftDown()
+            time.sleep(random.randint(66, 100) * 0.001)
+            MoveToBMP("fleet")
+            wyhkm.LeftUp()
+            MoveToBMP("666666")
+        else:
+            MoveToBMP("666666")
+
+
 
 print("hello world")
 input()
