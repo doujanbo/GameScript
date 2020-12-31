@@ -42,26 +42,28 @@ if not wyhkm.Open(DevId):
 
 #大图中找小图，并返回各种坐标和相似度
 def matchImg(imgobj,num,confidencevalue=0.5):
-    imsrc = ac.imread("./screenshot/background.bmp")
+    imsrc = ac.imread("./screenshot/background.png")
     imobj = ac.imread(imgobj)
     return ac.find_all_template(imsrc, imobj, threshold = num)
 
 #截屏并保存
 def screenshot(bmpname):
     im = ImageGrab.grab()
-    im.save('./screenshot/' + bmpname + '.bmp','bmp')
+    im.save('./screenshot/' + bmpname + '.png','png')
 
 #输入大图和小图找出小图在大图中的位置和相似度，如果没找到就返回None
 def ReturnCoordinates(imgobj, Similarity):
 
     screenshot("background")
     try:
-        return matchImg("./screenshot/" + imgobj + ".bmp", Similarity)
+        return matchImg("./screenshot/" + imgobj + ".png", Similarity)
     except:
         print("没找到")
+        sayhello("没有找到图片")
         return None
 
 def MoveToAdd(x, y):
+    '''移动到指定坐标'''
 
     time.sleep(random.randint(66, 100) * 0.001)
     x = x + random.randint(-2,3)
@@ -70,6 +72,7 @@ def MoveToAdd(x, y):
     time.sleep(random.randint(66, 100) * 0.001)
 
 def highestXY(coordinates):
+    '''取出最高处的匹配图片的坐标'''
     i = 0
     xy = coordinates[0]["result"]
     for k in coordinates:
@@ -77,20 +80,69 @@ def highestXY(coordinates):
             xy = k["result"]
     return xy
 
+def FindBMP(name):
+    '''移动到指定图片'''
+    i = ReturnCoordinates(name, 0.995)
+    if i:
+        print(i)
+        sayhello("发现此图片")
+        return len(i)
+    else:
+        sayhello("没有发现此图片")
+        return False
+
+
+
 def MoveToBMP(name):
+    '''移动到指定图片'''
+    time.sleep(random.randint(66, 100) * 0.001)
     xy = (0, 0)
-    xy = highestXY(ReturnCoordinates(name, 0.999))
-    x, y = xy
-    MoveToAdd(x, y)  # 移动到小行星的位置
+    i = ReturnCoordinates(name, 0.995)
+    if i:
+        xy = highestXY(i)
+        x, y = xy
+        MoveToAdd(x, y)
+        time.sleep(random.randint(66, 100) * 0.001)
+        return len(i)
+    else:
+        return False
 
-def locking(name):
 
+def locking():
+    '''锁定矿石'''
     xy = (0, 0)
-    xy = highestXY(ReturnCoordinates(name, 0.999))
+    xy = highestXY(ReturnCoordinates("xiaoxinxing", 0.999))
     x, y = xy
     MoveToAdd(x, y)  # 移动到小行星的位置
     wyhkm.LeftClick()  # 左健单击
+    time.sleep(random.randint(66, 100) * 0.001)
     wyhkm.Keypress('Ctrl')
+
+    MoveToAdd(x, y + 16)
+    wyhkm.LeftClick()  # 左健单击
+    time.sleep(random.randint(66, 100) * 0.001)
+    wyhkm.Keypress('Ctrl')
+
+    MoveToAdd(x, y + 32)
+    wyhkm.LeftClick()  # 左健单击
+    time.sleep(random.randint(66, 100) * 0.001)
+    wyhkm.Keypress('Ctrl')
+
+    MoveToAdd(x, y + 48)
+    wyhkm.LeftClick()  # 左健单击
+    time.sleep(random.randint(66, 100) * 0.001)
+    wyhkm.Keypress('Ctrl')
+
+    MoveToAdd(x, y + 64)
+    wyhkm.LeftClick()  # 左健单击
+    time.sleep(random.randint(66, 100) * 0.001)
+    wyhkm.Keypress('Ctrl')
+
+    MoveToAdd(x, y + 80)
+    wyhkm.LeftClick()  # 左健单击
+    time.sleep(random.randint(66, 100) * 0.001)
+    wyhkm.Keypress('Ctrl')
+    time.sleep(random.randint(66, 100) * 0.001)
 
 engine = pyttsx3.init()
 def sayhello(strhello):
@@ -99,11 +151,28 @@ def sayhello(strhello):
     engine.say(strhello)
     engine.runAndWait()
 
+def open_gun():
+    if MoveToBMP("gun"):
+        wyhkm.LeftClick()  # 左健单击
+        return True
+    else:
+        return False
+
+
 
 time.sleep(3)
-#locking("xiaoxinxing")
-MoveToBMP("xiaoxinxing")
-sayhello("运行完毕")
+while True:
+    #如果有锁定的矿，没有正在挖矿
+    if FindBMP("mineral") and (FindBMP("mining") is not True):
+        open_gun()
+        open_gun()
+    #有锁定的矿并且正在挖矿
+    if FindBMP("mineral") and FindBMP("mining"):
+        time.sleep(3)
+    #如果只有一个锁定的矿
+    if FindBMP("mineral") < 2:
+        locking()
+    if MoveToBMP("Orebin")
 
 print("hello world")
 input()
