@@ -14,30 +14,6 @@ import random
 import pyttsx3
 import pyautogui
 
-#进程内注册插件,模块所在的路径按照实际位置修改
-#hkmdll = windll.LoadLibrary("D:/GameScript/mouse/wyhkm.dll")
-
-#创建对象
-#try:
-wyhkm=win32com.client.Dispatch("wyp.hkm")
-#except:
-#print("创建对象失败!")
-#sys.exit(0)
-#获得模块版本号
-version=wyhkm.GetVersion()
-print("无涯键鼠盒子模块版本："+hex(version))
-#查找设备,这个只是例子,参数中的VID和PID要改成实际值
-
-DevId=wyhkm.SearchDevice(0x2612, 0x1701, 0)
-
-if DevId==-1:
-    print("未找到无涯键鼠盒子")
-    sys.exit(0)
-#打开设备
-if not wyhkm.Open(DevId):
-    print("打开无涯键鼠盒子失败")
-    sys.exit(0)
-#打开资源管理器快捷键Win+E
 
 
 #大图中找小图，并返回各种坐标和相似度
@@ -67,7 +43,7 @@ def MoveToAdd(x, y):
     time.sleep(random.randint(66, 100) * 0.001)
     x = x + random.randint(-2,3)
     y = y + random.randint(-2,3)
-    wyhkm.MoveTo(x, y)
+    pyautogui.moveTo(x, y, 0.5, pyautogui.easeInQuad)
     time.sleep(random.randint(66, 100) * 0.001)
 
 def highestXY(coordinates):
@@ -127,34 +103,34 @@ def locking():
     xy = highestXY(ReturnCoordinates("xiaoxinxing", 0.995))
     x, y = xy
     MoveToAdd(x, y)  # 移动到小行星的位置
-    wyhkm.LeftClick()  # 左健单击
+    pyautogui.click(button='left')  # 左健单击
     time.sleep(random.randint(66, 100) * 0.001)
-    wyhkm.Keypress('Ctrl')
+    pyautogui.press('ctrl')
 
     MoveToAdd(x, y + 16)
-    wyhkm.LeftClick()  # 左健单击
+    pyautogui.click(button='left')  # 左健单击
     time.sleep(random.randint(66, 100) * 0.001)
-    wyhkm.Keypress('Ctrl')
+    pyautogui.press('ctrl')
 
     MoveToAdd(x, y + 32)
-    wyhkm.LeftClick()  # 左健单击
+    pyautogui.click(button='left')   # 左健单击
     time.sleep(random.randint(66, 100) * 0.001)
-    wyhkm.Keypress('Ctrl')
+    pyautogui.press('ctrl')
 
     MoveToAdd(x, y + 48)
-    wyhkm.LeftClick()  # 左健单击
+    pyautogui.click(button='left')   # 左健单击
     time.sleep(random.randint(66, 100) * 0.001)
-    wyhkm.Keypress('Ctrl')
+    pyautogui.press('ctrl')
 
     MoveToAdd(x, y + 64)
-    wyhkm.LeftClick()  # 左健单击
+    pyautogui.click(button='left')  # 左健单击
     time.sleep(random.randint(66, 100) * 0.001)
-    wyhkm.Keypress('Ctrl')
+    pyautogui.press('ctrl')
 
     MoveToAdd(x, y + 80)
-    wyhkm.LeftClick()  # 左健单击
+    pyautogui.click(button='left')  # 左健单击
     time.sleep(random.randint(66, 100) * 0.001)
-    wyhkm.Keypress('Ctrl')
+    pyautogui.press('ctrl')
     time.sleep(random.randint(66, 100) * 0.001)
 
 engine = pyttsx3.init()
@@ -166,13 +142,14 @@ def sayhello(strhello):
     '''
 def sayhello2(strhello):
     pass
+'''
     engine.say(strhello)
     engine.runAndWait()
-
+'''
 
 def open_gun():
     if MoveToBMP("gun"):
-        wyhkm.LeftClick()  # 左健单击
+        pyautogui.click(button='left')  # 左健单击
 
         sayhello2("打开矿枪成功")
         return True
@@ -186,8 +163,9 @@ def open_gun():
 
 
 time.sleep(3)
+
 MoveToBMP("eve")
-wyhkm.LeftClick()
+pyautogui.click(button='left')
 time.sleep(0.5)
 
 while True:
@@ -207,13 +185,13 @@ while True:
         locking()
 
     if MoveToBMP("Orebin"):
-        wyhkm.LeftClick()
+        pyautogui.click(button='left')
         if MoveToBMP2("Warehouseore"):
             sayhello2("转移矿石")
-            wyhkm.LeftDown()
+            pyautogui.mouseDown(button='left')
             time.sleep(random.randint(66, 100) * 0.001)
             MoveToBMP("fleet")
-            wyhkm.LeftUp()
+            pyautogui.mouseUp(button='left')
             MoveToBMP("666666")
         else:
             MoveToBMP("666666")
