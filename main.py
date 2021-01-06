@@ -330,7 +330,7 @@ def fun():
 
 
 
-'''
+
 #逆戟鲸
 while True:
     if FindBMP2("mineral") < 2:
@@ -347,7 +347,7 @@ while True:
                 wyhkm.LeftClick()
                 time.sleep(3)
                 MoveToAdd(1440, 900)
-'''
+
 
 print("hello world")
 input()
